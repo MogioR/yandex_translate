@@ -3,13 +3,13 @@ import json
 from Modules.yandex_translate_service import YandexTranslateService
 from Modules.GoogleApi.google_sheets_api import GoogleSheetsApi
 
-YANDEX_FOLDER_ID = ''
-YANDEX_API_KEY = ''
-GOOGLE_TOKEN = ''
-GOOGLE_DOC = ''
-GOOGLE_LIST = 'translate'
-LANG = 'en'
-PACKET_SIZE = 250
+YANDEX_FOLDER_ID = ''                   # Yandex folder
+YANDEX_API_KEY = ''                     # Yandex service secret
+GOOGLE_TOKEN = ''                       # Google token
+GOOGLE_DOC = ''                         # Google table id
+GOOGLE_LIST = 'translate'               # Google list_name
+LANG = 'en'                             # Target language
+PACKET_SIZE = 250                       # Packet size to upload
 
 
 TRANSLATE_LEN_LIMIT = 10000
