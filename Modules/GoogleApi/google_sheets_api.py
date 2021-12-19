@@ -42,6 +42,26 @@ class GoogleSheetsApi:
         else:
             return []
 
+    def get_data_from_sheets_packet(self, table_id, list_name, start_range_column, start_range_row,
+                                    end_range_column, end_range_row, major_dimension,
+                                    packet_size):
+        begin_rows_pointer = start_range_row
+        if end_range_row - start_range_row < 1:
+            raise Exception('Wrong range')
+
+        data = []
+        while begin_rows_pointer < end_range_row - start_range_row:
+            print(begin_rows_pointer)
+            end_pointer = begin_rows_pointer + packet_size
+            if end_pointer > end_range_row:
+                end_pointer = end_range_row
+
+            data += self.get_data_from_sheets(table_id, list_name, start_range_column + str(begin_rows_pointer),
+                                              end_range_column + str(end_pointer), major_dimension)
+            begin_rows_pointer += packet_size
+
+        return data
+
     # Put data to document table_id, sheet list_name in range [start_range_point, end_range_point]
     # in major_dimension (ROWS/COLUMNS)
     def put_data_to_sheets(self, table_id, list_name, start_range_point, end_range_point, major_dimension, data):
@@ -65,7 +85,7 @@ class GoogleSheetsApi:
     def put_column_to_sheets(self, table_id, list_name, column, start_row, data):
         values = [[i] for i in data]
         self.put_data_to_sheets(table_id, list_name, column + str(start_row),
-                           column + str(start_row+len(data)), 'ROWS', values)
+                                column + str(start_row + len(data)), 'ROWS', values)
 
     # Put data to document table_id, sheet list_name in column column(char) and range [start_row, start_row+len(data)]
     # by packets with size packet_size
@@ -74,11 +94,12 @@ class GoogleSheetsApi:
         def func_chunks_generators(lst, n):
             for i in range(0, len(lst), n):
                 yield lst[i: i + n]
+
         packets = list(func_chunks_generators(data, packet_size))
 
         shift = 0
         for packet in packets:
-            self.put_column_to_sheets(table_id, list_name, column, start_row+shift, packet)
+            self.put_column_to_sheets(table_id, list_name, column, start_row + shift, packet)
             shift += packet_size
 
     # Put data to document table_id, sheet list_name in row column and
@@ -179,7 +200,7 @@ class GoogleSheetsApi:
     def convert_column_index_to_int(char_column_index):
         char_column_index = char_column_index.lower()
         int_index = 0
-        len_ = len(char_column_index)-1
+        len_ = len(char_column_index) - 1
         for i in range(len_, -1, -1):
             digit = ord(char_column_index[i]) - ord('a') + 1
             int_index += digit * pow(26, len_ - i)
