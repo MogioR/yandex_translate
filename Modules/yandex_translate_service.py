@@ -45,6 +45,9 @@ class YandexTranslateService:
         except Exception as e:
             raise e
 
+        if response.status_code != 200:
+            raise Exception('Error reason: ' + response.reason)
+
         result = []
         for translation in response.json()['translations']:
             result.append(translation['text'])

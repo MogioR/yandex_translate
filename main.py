@@ -5,12 +5,12 @@ from tqdm import  tqdm
 from Modules.yandex_translate_service import YandexTranslateService
 from Modules.GoogleApi.google_sheets_api import GoogleSheetsApi
 
-YANDEX_FOLDER_ID = ''
+YANDEX_FOLDER_ID = 'b1g11c3160i9df0ub5fh'
 YANDEX_API_KEY = ""
 GOOGLE_TOKEN = 'Environment/red_sale_google_token.json'
 GOOGLE_DOC = ''
 GOOGLE_LIST = 'translate'
-LANG = 'en'
+LANG = 'az'
 TRANSLATE_LEN_LIMIT = 10000
 PACKET_SIZE = 250
 
@@ -42,6 +42,7 @@ if not LOAD_FROM_BACKUP:
                                 translated[index] = buf[j]
                         except Exception as e:
                             print(e)
+                            print('Ошибка api' + str(e))
                             break
 
                         to_translate.clear()
@@ -71,7 +72,7 @@ if not LOAD_FROM_BACKUP:
             for j, index in enumerate(to_translate_indexes):
                 translated[index] = buf[j]
         except Exception as e:
-            print(e)
+            print('Ошибка api: ' + str(e))
 
     translated_pairs = []
     counter = 0
