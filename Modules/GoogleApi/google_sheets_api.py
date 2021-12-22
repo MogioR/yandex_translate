@@ -51,14 +51,13 @@ class GoogleSheetsApi:
 
         data = []
         while begin_rows_pointer < end_range_row - start_range_row:
-            print(begin_rows_pointer)
             end_pointer = begin_rows_pointer + packet_size
             if end_pointer > end_range_row:
                 end_pointer = end_range_row
 
             data += self.get_data_from_sheets(table_id, list_name, start_range_column + str(begin_rows_pointer),
                                               end_range_column + str(end_pointer), major_dimension)
-            begin_rows_pointer += packet_size
+            begin_rows_pointer = end_pointer
 
         return data
 

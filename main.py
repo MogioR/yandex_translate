@@ -1,14 +1,14 @@
 import json
 
-from tqdm import  tqdm
+from tqdm import tqdm
 
 from Modules.yandex_translate_service import YandexTranslateService
 from Modules.GoogleApi.google_sheets_api import GoogleSheetsApi
 
 YANDEX_FOLDER_ID = 'b1g11c3160i9df0ub5fh'
-YANDEX_API_KEY = ""
+YANDEX_API_KEY = "AQVN0IN7GD7OoFW_Knx5RgqkElAZ3BfZiMyQRKh0"
 GOOGLE_TOKEN = 'Environment/red_sale_google_token.json'
-GOOGLE_DOC = ''
+GOOGLE_DOC = '18CSD7sNaJWQ4DDOv6omd0J2jSYuT7xjlKCyAxSdz-QQ'
 GOOGLE_LIST = 'translate'
 LANG = 'az'
 TRANSLATE_LEN_LIMIT = 10000
@@ -18,12 +18,13 @@ LOAD_FROM_BACKUP = False
 
 if not LOAD_FROM_BACKUP:
     sheets = GoogleSheetsApi(GOOGLE_TOKEN)
-    raw_data = sheets.get_data_from_sheets(GOOGLE_DOC, GOOGLE_LIST, 'A2', 'B' +
-                                           str(sheets.get_list_size(GOOGLE_DOC, GOOGLE_LIST)[1]), 'ROWS')
+    raw_data = sheets.get_data_from_sheets_packet(GOOGLE_DOC, GOOGLE_LIST, 'A', 2, 'B',
+                                                  sheets.get_list_size(GOOGLE_DOC, GOOGLE_LIST)[1], 'ROWS',
+                                                  PACKET_SIZE)
 
     api = YandexTranslateService(YANDEX_API_KEY, YANDEX_FOLDER_ID)
 
-    translated = ['']*len(raw_data)
+    translated = [''] * len(raw_data)
     to_translate = []
     to_translate_indexes = []
     translate_len = 0
